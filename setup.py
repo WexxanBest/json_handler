@@ -9,7 +9,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='json_handler',
-    version='1.0.1',
+    version='1.0',
     author='Wexxan',
     author_email='WexxanBest@yandex.ru',
     url='https://github.com/WexxanBest/json_handler',
