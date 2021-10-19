@@ -3,19 +3,22 @@ from pathlib import Path
 import os
 
 
-def load_from_json(filename: str):
-    with open(filename, mode='r') as file:
+def load_from_json(filename: str, encoding: str = 'utf-8'):
+    with open(filename, mode='r', encoding=encoding) as file:
         data = json.load(file)
 
     return data
 
 
-def save_to_json(filename: str, data: dict):
-    with open(filename, mode='w') as file:
+def save_to_json(filename: str, data: dict, encoding: str = 'utf-8'):
+    with open(filename, mode='w', encoding=encoding) as file:
         json.dump(data, file)
 
 
 class DictHandler(dict):
+    """
+    Class helps you handling Python dict as if it was an objects with attributes
+    """
     def __init__(self, d=None, **kwargs):
         if d is None:
             d = {}
@@ -23,10 +26,9 @@ class DictHandler(dict):
             d.update(**kwargs)
         for k, v in d.items():
             setattr(self, k, v)
-        # Class attributes
+
         for k in self.__class__.__dict__.keys():
             if not (k.startswith('__') and k.endswith('__')) and k not in ('update', 'pop', 'load_from_json', 'save_to'):
-                print(f'{k=} {getattr(self, k)=}')
                 setattr(self, k, getattr(self, k))
 
     def __setattr__(self, name, value):
@@ -54,17 +56,30 @@ class DictHandler(dict):
         return super().pop(k, d)
 
     @staticmethod
-    def load_from_json(filename: str):
-        data = load_from_json(filename)
+    def load_from_json(filename: str, encoding='utf-8'):
+        data = load_from_json(filename, encoding=encoding)
 
         return DictHandler(data)
 
-    def save_to(self, filename):
-        save_to_json(filename, self)
+    def save_to(self, filename, encoding='utf-8'):
+        save_to_json(filename, self, encoding=encoding)
 
 
 class JsonHandler:
-    def __init__(self, filename: str, data: dict = None, default_data: dict = None, auto_save=False, auto_create=True):
+    """
+    Class helps you handling JSON-like files as if it was an objects with attributes
+    """
+    def __init__(self, filename: str, data: dict = None, default_data: dict = None, auto_save=False, auto_create=False):
+        """
+        :param str filename: name of JSON-like file to handle
+        :param dict data: data you can pass on initialization (default is None)
+        :param dict default_data: data which will be applied if there is no data in JSON-file
+        and 'data' parameter not provided (default is None)
+        :param bool auto_save: if True it will save data to JSON-file each time data is changing (default is True)
+        :param bool auto_create: if True file will automatically creates if it does not exist
+
+        :raises FileNotFoundError: if there is no such filename and 'auto_create' = False
+        """
         if not Path(filename).exists() and auto_create:  # create file if doesn't exist and 'auto_create' = True
             if data or not default_data:
                 self.__data__ = DictHandler(data) if data else DictHandler()
@@ -78,24 +93,44 @@ class JsonHandler:
             self.__data__ = DictHandler.load_from_json(filename)
 
         else:
-            raise ValueError(f"File '{filename}' does not exist and it is not allowed to create it")
+            raise FileNotFoundError(f"File '{filename}' was not found and it is not allowed to create it "
+                                    f"(auto_create=False)")
 
         self.__default_data__ = default_data
         self.__filename__ = filename
         self.__auto_save__ = auto_save
 
-    def save(self, filename: str = None):
+    def save(self, filename: str = None, encoding='utf-8'):
+        """
+        Saves your dict-like data into JSON-file. If another filename is not specified, it will save to
+        filename given on initialization
+
+        :param str filename: (optional) file to save data to (default is None)
+        :param encoding: (default is 'utf-8')
+
+        :return: None
+        """
         if not filename:
             filename = self.__filename__
 
-        self.__data__.save_to(filename)
+        self.__data__.save_to(filename, encoding=encoding)
 
     def reset_to_default(self):
+        """
+        Reset data to data given on initialization as 'default_data'
+
+        :return: None
+        """
         self.__data__ = DictHandler(self.__default_data__)
         if self.__auto_save__:
             self.save()
 
     def delete_file(self):
+        """
+        Deletes JSON-file
+
+        :return: None
+        """
         os.remove(self.__filename__)
 
     def __getattr__(self, item):
