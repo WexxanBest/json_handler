@@ -1,7 +1,2 @@
-
-dist/json_handler-1.0.tar.gz
-json_handler.egg-info/dependency_links.txt
-json_handler.egg-info/PKG-INFO
-json_handler.egg-info/top_level.txt
-json_handler.egg-info/top_level.txt
-json_handler.egg-info/SOURCES.txt
+dist/
+json_handler.egg-info/
