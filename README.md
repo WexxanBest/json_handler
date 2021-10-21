@@ -2,7 +2,13 @@
 
 It's easy-to-use library which helps you to work with data in JSON files and Python dictionaries like if they were Python objects.
 
-## Usage Examples
+## Installation
+
+```commandline
+pip install json_handler
+```
+
+## Getting Started
 
 ### Example 1. 
 
