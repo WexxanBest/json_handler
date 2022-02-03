@@ -7,7 +7,7 @@ It's easy-to-use library which helps you to work with data in JSON files and Pyt
 ```commandline
 pip install json_handler
 ```
-
+No dependencies!
 ## Getting Started
 
 ### Example 1. 
