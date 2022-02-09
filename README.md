@@ -138,3 +138,27 @@ The output will be:
 ```
 Yeah, you can actually print _JsonHandler_ object and it will be printed
 like usual _Python dict_
+
+### Example 5.
+You can pretty print your _JsonHandler_ object like any _dict_ object by using
+built-in python module _pprint_.
+
+```python
+from pprint import pprint
+from json_handler import JsonHandler
+
+
+handler = JsonHandler('test.json')
+handler.well = [{'hi': 'hello'} for _ in range(5)]
+
+pprint(handler)
+```
+
+The output will be:
+```commandline
+{'well': [{'hi': 'hello'},
+          {'hi': 'hello'},
+          {'hi': 'hello'},
+          {'hi': 'hello'},
+          {'hi': 'hello'}]}
+```
