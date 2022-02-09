@@ -155,10 +155,10 @@ pprint(handler)
 ```
 
 The output will be:
-```commandline
-{'well': [{'hi': 'hello'},
-          {'hi': 'hello'},
-          {'hi': 'hello'},
-          {'hi': 'hello'},
-          {'hi': 'hello'}]}
+```json
+{"well": [{"hi": "hello"},
+          {"hi": "hello"},
+          {"hi": "hello"},
+          {"hi": "hello"},
+          {"hi": "hello"}]}
 ```
