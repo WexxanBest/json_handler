@@ -9,9 +9,9 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name='json_handler',
-    version='1.1',
+    version='1.2',
     license='MIT',
-    author='Wexxan',
+    author='WexxanBest',
     author_email='WexxanBest@yandex.ru',
     url='https://github.com/WexxanBest/json_handler',
     download_url="http://pypi.python.org/pypi/json_handler/",
@@ -25,6 +25,6 @@ setup(
                  'Operating System :: OS Independent',
                  'License :: OSI Approved :: MIT License',
                  'Intended Audience :: Developers',
-                 'Development Status :: 3 - Alpha',
+                 'Development Status :: 4 - Beta',
                  'Programming Language :: Python :: 3.8'],
 )

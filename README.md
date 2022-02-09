@@ -33,7 +33,8 @@ handler = JsonHandler('example.json')
 
 handler.field_1 = 123
 handler['field_2'] = "What's up?"
-handler.sub_field = [1, 2, 3]
+handler.field_3 = {}
+handler.field_3.sub_field = [1, 2, 3]
 
 handler.save()
 ```
