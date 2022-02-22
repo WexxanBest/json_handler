@@ -184,7 +184,7 @@ class JsonHandler(DictHandler):
         data = data if data else default_data
 
         if filename and Path(filename).exists():
-            print('Loading from file...')
+            # print('Loading from file...')
             file_data = load_from_json(filename, encoding=encoding)
             self.update(file_data)
 
@@ -202,7 +202,7 @@ class JsonHandler(DictHandler):
 
         :return: None
         """
-        print(f'Changes ({_action}). Saving...', self)
+        # print(f'Changes ({_action}). Saving...', self)
         if not encoding:
             encoding = self.__encoding__
         if not filename:
