@@ -52,14 +52,13 @@ The result of modifications will be (example.json):
 
 ### Example 2.
 If file does not exist, it will be automatically 
-created if parameter _'auto_create'_ 
-set to _True_.
+created after using _save()_ method.
 
 
 ```python
 from json_handler import JsonHandler
 
-handler = JsonHandler('example2.json', auto_create=True)
+handler = JsonHandler('example2.json')
 
 handler.a = 5
 handler.b = 'Hi there'
@@ -82,7 +81,7 @@ To do that you should just set parameter _'auto_save'_ to _True_.
 ```python
 from json_handler import JsonHandler
 
-handler = JsonHandler('example3.json', auto_create=True, auto_save=True)
+handler = JsonHandler('example3.json', auto_save=True)
 
 handler.hi = 'Hello'
 handler.five = 5
@@ -104,7 +103,7 @@ You can use _Python built-in dict_ methods with JsonHandler object. For example:
 ```python
 from json_handler import JsonHandler
 
-handler = JsonHandler('example4.json', auto_create=True, auto_save=True)
+handler = JsonHandler('example4.json', auto_save=True)
 
 handler.hi = 'Hello'
 handler.five = 5
@@ -124,7 +123,6 @@ dict_values(['Hello', 5, {'fine': 'ok'}])
 dict_items([('hi', 'Hello'), ('five', 5), ('sub_dict', {'fine': 'ok'})])
 ```
 
----
 Also you can clear data by using _dict.clear()_ method:
 
 ```python
@@ -148,17 +146,19 @@ from pprint import pprint
 from json_handler import JsonHandler
 
 
-handler = JsonHandler('test.json')
+handler = JsonHandler()
 handler.well = [{'hi': 'hello'} for _ in range(5)]
 
 pprint(handler)
 ```
 
 The output will be:
-```json
-{"well": [{"hi": "hello"},
-          {"hi": "hello"},
-          {"hi": "hello"},
-          {"hi": "hello"},
-          {"hi": "hello"}]}
+```commandline
+{'well': [{'hi': 'hello'},
+          {'hi': 'hello'},
+          {'hi': 'hello'},
+          {'hi': 'hello'},
+          {'hi': 'hello'}]}
 ```
+
+
