@@ -17,8 +17,9 @@ class List(list):
         self.__on_change__('list.clear')
 
     def pop(self, __index=...):
-        super().pop(__index)
+        res = super().pop(__index)
         self.__on_change__('list.pop')
+        return res
 
     def append(self, __object) -> None:
         super().append(__object)
@@ -57,9 +58,14 @@ class DictHandler(dict):
         if kwargs:
             self.update(**kwargs)
 
-    def update(self, __m={}, **kwargs) -> None:
-        self.__data__.update(__m, **kwargs)
-        self.__on_change__('dict.update')
+    def update(self, __m=None, **kwargs) -> None:
+        if __m is None:
+            __m = {}
+        for key, value in __m.items():
+            self.__setattr__(key, value)
+        for key, value in kwargs.items():
+            self.__setattr__(key, value)
+        self.__on_change__(f'dict.update')
 
     def clear(self) -> None:
         self.__data__.clear()
@@ -110,11 +116,11 @@ class DictHandler(dict):
             self.set(key, value)
             return
         if isinstance(value, tuple):
-            value = [DictHandler(x)
+            value = [DictHandler(x, self.__on_change__)
                      if isinstance(x, dict) else x for x in value]
             value = tuple(value)
         elif isinstance(value, list):
-            value = List([DictHandler(x)
+            value = List([DictHandler(x, self.__on_change__)
                           if isinstance(x, dict) else x for x in value], self.__on_change__)
         elif isinstance(value, dict) and not isinstance(value, DictHandler):
             value = DictHandler(value, self.__on_change__)
@@ -177,7 +183,7 @@ class JsonHandler(DictHandler):
         self.set('__auto_save__', auto_save)
         self.set('__encoding__', encoding)
 
-        on_change_func = lambda x: self.save(_action=x) if auto_save else None
+        self.__on_change__ = lambda x: self._auto_save(x)
 
         assert not (not filename and auto_save), "Filename should be provided to use 'auto_save'"
 
@@ -188,9 +194,11 @@ class JsonHandler(DictHandler):
             file_data = load_from_json(filename, encoding=encoding)
             self.update(file_data)
 
-        if auto_save:
-            self.__on_change__ = on_change_func
         self.update(data)
+
+    def _auto_save(self, action: str = None):
+        if self.__auto_save__:
+            self.save(_action=action)
 
     def save(self, filename: str = None, encoding=None, _action: str = None):
         """
